@@ -11,7 +11,8 @@
 #### When choosing values for j1 and j2, this program will give all of the CGCs for every possible value of m1 and m2,
 #### given that -j1<=m1<=j1 and -j2<=m2<=j2
 
-#### NOTE that, if running in Jupyter notebook, it will not support interactive version or show 'Pretty Table.'
+#### NOTE that, if running in Jupyter notebook, it will not support interactive version.
+#### NOTE that SymPy must be installed (supported with most recent Python versions)
 
 import math
 import sympy
