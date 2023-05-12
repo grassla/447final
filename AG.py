@@ -24,10 +24,8 @@ import numpy as np
 import pandas as pd
 
 
-j1 = 1.5
-j2 = 1
-#j1 = float(input('Enter a value for j1: '))
-#j2 = float(input('Enter a value for j2: '))
+j1 = float(input('Enter a value for j1: '))
+j2 = float(input('Enter a value for j2: '))
 
 #q = 0
 #while q < 10:
@@ -72,15 +70,16 @@ print('Clebsch-Gordan Coefficients for j1 =', j1, '& j2 =', j2)
 
 #----------------------------------------------------------------------
 data = []
+for J in np.arange(abs(j1 - j2), j1 + j2 + 1):
 #for J in np.arange(math.ceil(abs(j1-j2)), math.floor(j1+j2)):
-for m1 in np.arange(-j1, j1+1, 1):
-    for m2 in np.arange(-j2, j2+1, 1):
-        M = int(m1 + m2)
-        if(-J <= M <= J):
-            CGC = clebsch_gordan(j1, j2, m1, m2, J, M)
-            CGC_strip = '{:.4f}'.format(CGC).rstrip('0').rstrip('.')
-            #print(('{}   {}   {:.4f}'.format(m1, m2, CGC))) #### Crude table ####
-            data.append([m1, m2, J, CGC_strip])           
+    for m1 in np.arange(-j1, j1+1, 1):
+        for m2 in np.arange(-j2, j2+1, 1):
+            M = int(m1 + m2)
+            if(-J <= M <= J):
+                CGC = clebsch_gordan(j1, j2, m1, m2, J, M)
+                CGC_strip = '{:.4f}'.format(CGC).rstrip('0').rstrip('.')
+                #print(('{}   {}   {:.4f}'.format(m1, m2, CGC))) #### Crude table ####
+                data.append([m1, m2, J, CGC_strip])           
 #-----------------------------------------------------------------------
 
 #### DataFrame from the list of dictionaries ####
