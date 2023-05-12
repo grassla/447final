@@ -24,59 +24,37 @@ import numpy as np
 import pandas as pd
 
 
-#j1 = 1/2
-#j2 = 3/2
+j1 = 1.5
+j2 = 1
 #j1 = float(input('Enter a value for j1: '))
 #j2 = float(input('Enter a value for j2: '))
-#J = int(j1+j2)
 
-while True:
-    try:
-        j1 = float(input('Enter a value for j1: '))
-        j2 = float(input('Enter a value for j2: '))
-        J = int(j1+j2)
-        CGC = clebsch_gordan(j1, j2, m1, m2, J, M)
-        break
-    except:
-        print('Invalid input. Try again.')
-        continue
-        
-        
+#q = 0
+#while q < 10:
+ #   j1 = float(input('Enter a value for j1: '))
+  #  j2 = float(input('Enter a value for j2: '))
+   # J = int(j1 + j2)
+    #q += 1
+            
 #print('  m1   ', ' m2   ', ' CGC ') #### Crude table ####
 #print('----------------------')
 
-data = []
-for m1 in np.arange(-j1, j1+1, 1):
-    for m2 in np.arange(-j2, j2+1, 1):
-        M = int(m1 + m2)
-        if(-J <= M <= J):
-            CGC = clebsch_gordan(j1, j2, m1, m2, J, M)
-            CGC_strip = '{:.4f}'.format(CGC).rstrip('0').rstrip('.')
-            #print(('{}   {}   {:.4f}'.format(m1, m2, CGC))) #### Crude table ####
-            #### Pretty table: ####
+Jmin = abs(j1-j2)
+Jmax = j1+j2
+Js = [S(j) for j in np.arange(Jmin, Jmax+1)]
 
-            data.append([m1, m2, CGC_strip])
-
-#### DataFrame from the list of dictionaries ####
-df = pd.DataFrame(data, columns=['m1', 'm2', 'CGC'])
-df = df.set_index(['m1', 'm2', 'CGC'], drop=True)
-
-#### SOME PYTHON APPLICATIONS MAY ONLY SUPPORT 'df' RATHER THAN 'display(df)' #####
-#df
-display(df)
-
-
+J = j1 + j2
 
 def clebsch_gordan(j1, j2, m1, m2, J, M):
     if(2*j1 != math.floor(2*j1) or 2*j2 != math.floor(2*j2) or 2*m1 != math.floor(2*m1) or 2*m2 != math.floor(2*m2)):
         raise ValueError('Inputs must be integers or half-integers. Try again.')
-    elif(j1-j2 <= J <= j1+j2 and m1+m2 == M):
+    elif(j1-j2 <= J <= j1+j2):
         Numerator = sqrt((2 * J + 1) * factorial(J + j1 - j2) * factorial(J - j1 +j2) * factorial(j1 + j2 - J) * factorial(j1 - m1) * factorial(j1 + m1) * factorial (j2 - m2) * factorial (j2 + m2) * factorial(J + M) * factorial(J - M))
         Denominator = sqrt(factorial(j1 + j2 + J + 1))
         
         #### Summation Calcs ####
         sum = 0
-        for k in range(0, J + M + 2):
+        for k in np.arange(0, J + M + 2):
             try:
                 n = (((-1) ** k) / (factorial(k) * factorial(j1 + j2 - J - k) * factorial(j1 - m1 - k) * factorial(j2 + m2 - k) * factorial(J - j2 + m1 + k) * factorial(J - j1 - m2 + k)))
             #### Add the current term to the sum in a increments ####
@@ -89,5 +67,28 @@ def clebsch_gordan(j1, j2, m1, m2, J, M):
     return CGC
 
 CGC = clebsch_gordan(j1, j2, m1, m2, J, M)
+
+print('Clebsch-Gordan Coefficients for j1 =', j1, '& j2 =', j2)
+
+#----------------------------------------------------------------------
+data = []
+#for J in np.arange(math.ceil(abs(j1-j2)), math.floor(j1+j2)):
+for m1 in np.arange(-j1, j1+1, 1):
+    for m2 in np.arange(-j2, j2+1, 1):
+        M = int(m1 + m2)
+        if(-J <= M <= J):
+            CGC = clebsch_gordan(j1, j2, m1, m2, J, M)
+            CGC_strip = '{:.4f}'.format(CGC).rstrip('0').rstrip('.')
+            #print(('{}   {}   {:.4f}'.format(m1, m2, CGC))) #### Crude table ####
+            data.append([m1, m2, J, CGC_strip])           
+#-----------------------------------------------------------------------
+
+#### DataFrame from the list of dictionaries ####
+df = pd.DataFrame(data, columns=['m1', 'm2', 'J', 'CGC'])
+df = df.set_index(['m1', 'm2', 'J', 'CGC'], drop=True)
+
+#### SOME PYTHON APPLICATIONS MAY ONLY SUPPORT 'df' RATHER THAN 'display(df)' #####
+#df
+display(df)
 
 
